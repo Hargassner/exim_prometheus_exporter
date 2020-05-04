@@ -6,6 +6,7 @@ import (
 	"github.com/ActiveState/tail"
 	"github.com/fstab/exim_prometheus_exporter/metrics"
 	"github.com/fstab/exim_prometheus_exporter/server"
+	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/prometheus/client_golang/prometheus"
 	"net/http"
 	"os"
@@ -14,9 +15,9 @@ import (
 )
 
 var (
-	mainlog = flag.String("mainlog", "/var/log/exim4/mainlog", "Path to the exim4 mainlog file.")
+	mainlog = flag.String("mainlog", "/var/log/exim_mainlog", "Path to the exim4 mainlog file.")
 	readall = flag.Bool("readall", false, "Read mainlog from beginning? Default (false) is to start at the end of the file and read only new lines.")
-	port    = flag.Int("port", 8443, "The port to listen on for HTTPS requests.")
+	port    = flag.Int("port", 9130, "The port to listen on for HTTPS requests.")
 	cert    = flag.String("cert", "", "Path to the SSL certificate file for the HTTPS server. (optional)")
 	key     = flag.String("key", "", "Path to the SSL private key file for the HTTPS server. (optional)")
 )
@@ -34,7 +35,7 @@ var (
 func main() {
 	parseCommandline()
 	initPrometheus()
-	serverErrorChannel := startServer("/metrics", prometheus.Handler())
+	serverErrorChannel := startServer("/metrics", promhttp.Handler())
 	fmt.Printf("Starting server on https://localhost:%v/metrics\n", *port)
 	err := processLogLines(serverErrorChannel)
 	if err != nil {
