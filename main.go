@@ -63,11 +63,17 @@ func startServer(path string, handler http.Handler) chan error {
 	result := make(chan error)
 	go func() {
 		if len(*cert) > 0 && len(*key) > 0 {
+    		fmt.Println("Starting https connection")
 			result <- server.Run(*port, *cert, *key, path, handler)
 		} else {
     		
+    		fmt.Println("Starting http connection")
+    		
     		http.Handle(path, handler)
-	        result <- http.ListenAndServe(fmt.Sprintf(":%v", port),nil)
+    		
+    		pport := *port
+    
+	        result <- http.ListenAndServe(fmt.Sprintf(":%v", pport),nil)
     		
 		}
 	}()
