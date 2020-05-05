@@ -1,21 +1,21 @@
 package metrics
 
 import (
-	"fmt"
+	//"fmt"
 	"github.com/prometheus/client_golang/prometheus"
-	"os"
+	//"os"
 	"strings"
 )
 
 const exim_defer_total = "exim_defer_total"
 
 type deferMetric struct {
-	counter *prometheus.CounterVec
+	counter prometheus.Counter
 }
 
-func NewIncoming() *deferMetric {
+func NewDefer() *deferMetric {
 	return &deferMetric{
-		counter: prometheus.NewCounterVec(prometheus.CounterOpts{
+		counter: prometheus.NewCounter(prometheus.CounterOpts{
 			Name: exim_defer_total,
 			Help: "Total number of emails deferred.",
 		}),

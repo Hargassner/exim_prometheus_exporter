@@ -4,8 +4,8 @@ import (
 	"flag"
 	"fmt"
 	"github.com/ActiveState/tail"
-	"github.com/fstab/exim_prometheus_exporter/metrics"
-	"github.com/fstab/exim_prometheus_exporter/server"
+	"github.com/ralfonso-directnic/exim_prometheus_exporter/metrics"
+	"github.com/ralfonso-directnic/exim_prometheus_exporter/server"
 	"github.com/prometheus/client_golang/prometheus/promhttp"
 	"github.com/prometheus/client_golang/prometheus"
 	"net/http"
@@ -117,6 +117,9 @@ func process(line string) {
 	metricNames := make([]string, 0)
 	for _, metric := range metrics.Metrics {
 		if metric.Matches(line) {
+    		
+    		fmt.Println("Match",metric.Name())
+    		
 			metric.Process(line)
 			processed = true
 			metricNames = append(metricNames, metric.Name())

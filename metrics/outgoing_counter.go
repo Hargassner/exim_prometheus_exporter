@@ -1,21 +1,21 @@
 package metrics
 
 import (
-	"fmt"
+	//"fmt"
 	"github.com/prometheus/client_golang/prometheus"
-	"os"
+	//"os"
 	"strings"
 )
 
 const exim_outgoing_total = "exim_outgoing_total"
 
 type outgoingMetric struct {
-	counter *prometheus.CounterVec
+	counter prometheus.Counter
 }
 
-func NewIncoming() *outgoingMetric {
+func NewOutgoing() *outgoingMetric {
 	return &outgoingMetric{
-		counter: prometheus.NewCounterVec(prometheus.CounterOpts{
+		counter: prometheus.NewCounter(prometheus.CounterOpts{
 			Name: exim_outgoing_total,
 			Help: "Total number of emails outgoing.",
 		}),
@@ -31,7 +31,7 @@ func (m *outgoingMetric) Collector() prometheus.Collector {
 }
 
 func (m *outgoingMetric) Matches(line string) bool {
-	return strings.Contains(line, "=>")
+    	return strings.Contains(line, "=>")
 }
 
 func (m *outgoingMetric) Process(line string) {

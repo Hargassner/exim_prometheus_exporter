@@ -3,19 +3,19 @@ package metrics
 import (
 	"fmt"
 	"github.com/prometheus/client_golang/prometheus"
-	"os"
+	//"os"
 	"strings"
 )
 
 const exim_incoming_total = "exim_incoming_total"
 
 type incomingMetric struct {
-	counter *prometheus.CounterVec
+	counter prometheus.Counter
 }
 
 func NewIncoming() *incomingMetric {
 	return &incomingMetric{
-		counter: prometheus.NewCounterVec(prometheus.CounterOpts{
+		counter: prometheus.NewCounter(prometheus.CounterOpts{
 			Name: exim_incoming_total,
 			Help: "Total number of emails incoming.",
 		}),
@@ -31,6 +31,8 @@ func (m *incomingMetric) Collector() prometheus.Collector {
 }
 
 func (m *incomingMetric) Matches(line string) bool {
+    fmt.Println("******",line)
+
 	return strings.Contains(line, "<=")
 }
 
