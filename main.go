@@ -65,7 +65,10 @@ func startServer(path string, handler http.Handler) chan error {
 		if len(*cert) > 0 && len(*key) > 0 {
 			result <- server.Run(*port, *cert, *key, path, handler)
 		} else {
-			result <- server.RunWithDefaultKeys(*port, path, handler)
+    		
+    		http.Handle(path, handler)
+	        result <- http.ListenAndServe(fmt.Sprintf(":%v", port),nil)
+    		
 		}
 	}()
 	return result
