@@ -12,4 +12,6 @@ type Metric interface {
 var Metrics = []Metric{
 	NewRejectedRcptMetric(),
 	NewAuthenticatorFailedMetric(),
+	NewIncoming()
+	NewOutgoing()
 }
